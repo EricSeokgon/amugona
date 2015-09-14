@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Project: amugona
@@ -17,7 +18,7 @@ import javax.validation.constraints.Size;
 public class AccountDto {
 
     @Data
-    public static class Create{
+    public static class Create {
         @NotBlank
         @Size(min = 5)
         private String username;
@@ -25,5 +26,14 @@ public class AccountDto {
         @NotBlank
         @Size(min = 5)
         private String password;
+    }
+
+    @Data
+    public static class Response {
+        private long id;
+        private String username;
+        private String fullname;
+        private Date joined;
+        private Date updated;
     }
 }

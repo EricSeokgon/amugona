@@ -32,6 +32,10 @@ public class AccountService {
         account.setPassword(dto.getPassword());*/
 
         Account account = modelMapper.map(dto, Account.class);
+
+//        Account account = new Account();
+//        BeanUtils.copyProperties(dto, account);
+
         Date now = new Date();
         account.setJoined(now);
         account.setUpdated(now);

@@ -20,10 +20,10 @@ public class AccountTest {
     @Test
     public void getterSetter() {
         Account account = new Account();
-        account.setLoginId("sklee");
+        account.setUsername("sklee");
         account.setPassword("password");
 
-        assertThat(account.getLoginId(), is("sklee"));
+        assertThat(account.getUsername(), is("sklee"));
         assertThat(account.getPassword(), is("password"));
     }
 

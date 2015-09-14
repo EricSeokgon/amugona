@@ -29,7 +29,7 @@ public class AccountService {
     public Account createAccount(AccountDto.Create dto){
         /*Account account =new Account();
         account.setUsername(dto.getUsername());
-        account.setPassword(dto.getPassowrd());*/
+        account.setPassword(dto.getPassword());*/
 
         Account account = modelMapper.map(dto, Account.class);
         Date now = new Date();

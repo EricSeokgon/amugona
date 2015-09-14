@@ -24,6 +24,6 @@ public class AccountDto {
 
         @NotBlank
         @Size(min = 5)
-        private String passowrd;
+        private String password;
     }
 }

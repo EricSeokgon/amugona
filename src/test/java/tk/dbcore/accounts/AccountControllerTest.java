@@ -44,7 +44,7 @@ public class AccountControllerTest {
 
         AccountDto.Create createDto = new AccountDto.Create();
         createDto.setUsername("hadeslee");
-        createDto.setPassowrd("password");
+        createDto.setPassword("password");
 
 
         ResultActions result = mockMvc.perform(post("/accounts")

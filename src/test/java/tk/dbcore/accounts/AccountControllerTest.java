@@ -73,6 +73,7 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isBadRequest());
+        result.andExpect(jsonPath("$.code", is("duplicated.username.exception")));
     }
 
     @Test
@@ -87,6 +88,7 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isBadRequest());
+        result.andExpect(jsonPath("$.code", is("bad.request")));
     }
 
 

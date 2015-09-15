@@ -1,6 +1,7 @@
 package tk.dbcore.accounts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +41,16 @@ public class AccountControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    MockMvc mockMvc;
+
+    @Before
+    public void setUp(){
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+    }
+
     @Test
     public void createAccount() throws Exception {
-        MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-
+        //MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
         AccountDto.Create createDto = new AccountDto.Create();
         createDto.setUsername("hadeslee");
         createDto.setPassword("password");
@@ -56,7 +63,29 @@ public class AccountControllerTest {
         result.andDo(print());
         result.andExpect(status().isCreated());
 
-        //TODO JSON
+        //TODO JSON Path
+
+        result = mockMvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDto)));
+
+        result.andDo(print());
+        result.andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void createAccount_BadRequest() throws Exception {
+    AccountDto.Create createDto = new AccountDto.Create();
+        createDto.setUsername(" ");
+        createDto.setPassword("1234");
+
+        ResultActions result = mockMvc.perform(post("/accounts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createDto)));
+
+        result.andDo(print());
+        result.andExpect(status().isBadRequest());
+    }
+
 
 }

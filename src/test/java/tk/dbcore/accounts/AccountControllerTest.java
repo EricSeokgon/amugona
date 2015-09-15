@@ -46,7 +46,7 @@ public class AccountControllerTest {
     MockMvc mockMvc;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
     }
 
@@ -78,7 +78,7 @@ public class AccountControllerTest {
 
     @Test
     public void createAccount_BadRequest() throws Exception {
-    AccountDto.Create createDto = new AccountDto.Create();
+        AccountDto.Create createDto = new AccountDto.Create();
         createDto.setUsername(" ");
         createDto.setPassword("1234");
 

@@ -16,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import tk.dbcore.Application;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -62,8 +64,8 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isCreated());
+        result.andExpect(jsonPath("$.username", is("hadeslee")));
 
-        //TODO JSON Path
 
         result = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)

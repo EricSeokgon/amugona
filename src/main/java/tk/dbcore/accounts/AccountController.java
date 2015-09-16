@@ -39,19 +39,19 @@ public class AccountController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
-        Account newAccount = service.createAccount(create);
-
         // 1.리턴 타임으로 판단.
         // 2.파라미터 이용.
-
+        Account newAccount = service.createAccount(create);
         return new ResponseEntity<>(modelMapper.map(newAccount, AccountDto.Response.class), HttpStatus.CREATED);
+
     }
+
     @ExceptionHandler(UserDuplicaredException.class)
-    public ResponseEntity handleUserDuplicatedException(UserDuplicaredException e){
+    public ResponseEntity handleUserDuplicatedException(UserDuplicaredException e) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage("[" + e.getUsername() + "] 중복된 username 입니다.");
         errorResponse.setCode("duplicated.username.exception");
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
+    //TODO 예외 처리 네번째 방법(콜백....?
 }

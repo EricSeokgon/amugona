@@ -106,6 +106,14 @@ public class AccountControllerTest {
 
         ResultActions result = mockMvc.perform(get("/accounts"));
 
+        // {"content":
+        // [{"id":1,"username":"hadeslee","fullname":null,"joined":1442379729278,"updated":1442379729278}],"last":true,"totalElements":1,
+        // "totalPages":1,
+        // "size":20,
+        // "number":0,
+        // "sort":null,
+        // "first":true,
+        // "numberOfElements":1}
         result.andDo(print());
         result.andExpect(status().isOk());
     }

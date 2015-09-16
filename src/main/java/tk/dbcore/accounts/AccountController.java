@@ -68,8 +68,8 @@ public class AccountController {
     //TODO 뷰
     // NSPA 1. Thymeleaf
     // SPA 2. 리엑트
-
     // /accounts?page=0&sizw=2&sort=usernmae,desc&sort=joined,desc
+
     @RequestMapping(value = "/accounts", method = RequestMethod.GET)
     public ResponseEntity getAccounts(Pageable pageable) {
         Page<Account> page = repository.findAll(pageable);

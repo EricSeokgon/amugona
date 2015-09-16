@@ -2,6 +2,9 @@ package tk.dbcore.accounts;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -9,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import tk.dbcore.commons.ErrorResponse;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Project: amugona
@@ -24,6 +29,9 @@ public class AccountController {
 
     @Autowired
     private AccountService service;
+
+    @Autowired
+    private AccountRepository repository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -53,5 +61,15 @@ public class AccountController {
         errorResponse.setCode("duplicated.username.exception");
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-    //TODO 예외 처리 네번째 방법(콜백....?
+
+    // /accounts?page=0&sizw=2&sort=usernmae,desc&sort=joined,desc
+    @RequestMapping(value = "/accounts", method = RequestMethod.GET)
+    public ResponseEntity getAccounts(Pageable pageable) {
+        Page<Account> page = repository.findAll(pageable);
+        List<AccountDto.Response> content = page.getContent().parallelStream()
+                .map(account -> modelMapper.map(account, AccountDto.Response.class))
+                .collect(Collectors.toList());
+        PageImpl<AccountDto.Response> result = new PageImpl<>(content, pageable, page.getTotalElements());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

@@ -7,9 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -19,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import tk.dbcore.Application;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -37,7 +36,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @Transactional
-@TransactionConfiguration(defaultRollback = true)
 public class AccountControllerTest {
 
     @Autowired
@@ -45,6 +43,9 @@ public class AccountControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    AccountService service;
 
     MockMvc mockMvc;
 
@@ -54,7 +55,6 @@ public class AccountControllerTest {
     }
 
     @Test
-    @Rollback(false)
     public void createAccount() throws Exception {
         //MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
         AccountDto.Create createDto = new AccountDto.Create();
@@ -96,4 +96,17 @@ public class AccountControllerTest {
     }
 
     //TODO getAccounts()
+
+    @Test
+    public void getAccounts() throws Exception {
+        AccountDto.Create createDto = new AccountDto.Create();
+        createDto.setUsername("hadeslee");
+        createDto.setPassword("password");
+        service.createAccount(createDto);
+
+        ResultActions result = mockMvc.perform(get("/accounts"));
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
+    }
 }

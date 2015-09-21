@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import tk.dbcore.commons.ErrorResponse;
@@ -84,7 +83,8 @@ public class AccountController {
     }
 
     // 전체 업데이트 : PUT
-    // - (username:"hadeslee", passowrd:"pass", fullName:"seokgon lee")
+    // - (passowrd:"pass", fullName:"null")
+
     // 부분 업데이트 : PATCH
     // - (username:"hadeslee")
     // - (passowrd:"pass")
@@ -100,6 +100,12 @@ public class AccountController {
         Account updateAccount = service.updateAccount(id, updateDto);
         return new ResponseEntity<>(modelMapper.map(updateAccount, AccountDto.Response.class),
                 HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/accounts/{id}", method = DELETE)
+    public ResponseEntity deleteAccount(@PathVariable Long id){
+        service.deleteAccount(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     //TODO 예외 처리 네번째 방법 (콜백 비스무리한거....)
@@ -121,10 +127,4 @@ public class AccountController {
         return errorResponse;
     }
 
-    @RequestMapping(value = "/index", method = GET)
-    public String index(Model model) {
-        model.addAttribute("accounts", repository.findAll());
-        return "index"; //index.jsp -> <c:forEach items=${accounts} var="account">
-        //{ ${account.passowrd}
-    }
 }

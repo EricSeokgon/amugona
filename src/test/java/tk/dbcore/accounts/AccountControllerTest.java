@@ -17,8 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import tk.dbcore.Application;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -57,9 +56,7 @@ public class AccountControllerTest {
     @Test
     public void createAccount() throws Exception {
         //MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-        AccountDto.Create createDto = new AccountDto.Create();
-        createDto.setUsername("hadeslee");
-        createDto.setPassword("password");
+        AccountDto.Create createDto = accountCreateDto();
 
 
         ResultActions result = mockMvc.perform(post("/accounts")
@@ -99,9 +96,7 @@ public class AccountControllerTest {
 
     @Test
     public void getAccounts() throws Exception {
-        AccountDto.Create createDto = new AccountDto.Create();
-        createDto.setUsername("hadeslee");
-        createDto.setPassword("password");
+        AccountDto.Create createDto = accountCreateDto();
         service.createAccount(createDto);
 
         ResultActions result = mockMvc.perform(get("/accounts"));
@@ -117,4 +112,57 @@ public class AccountControllerTest {
         result.andDo(print());
         result.andExpect(status().isOk());
     }
+
+    private AccountDto.Create accountCreateDto() {
+        AccountDto.Create createDto = new AccountDto.Create();
+        createDto.setUsername("hadeslee");
+        createDto.setPassword("password");
+        return createDto;
+    }
+
+    @Test
+    public void getAccount() throws Exception {
+        AccountDto.Create createDto = new AccountDto.Create();
+        Account account = service.createAccount(createDto);
+
+        ResultActions result = mockMvc.perform(get("/accounts/" + account.getId()));
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateAccount() throws Exception {
+        AccountDto.Create createDto = accountCreateDto();
+        Account account = service.createAccount(createDto);
+
+        AccountDto.Update updateDto = new AccountDto.Update();
+        updateDto.setFullName("seokgon lee");
+        updateDto.setPassword("pass");
+
+        ResultActions result = mockMvc.perform(put("/accounts/" + account.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDto)));
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
+        result.andExpect(jsonPath("$.fullname", is("seokdon lee")));
+
+    }
+
+    @Test
+    public void deleteAccount() throws Exception {
+        ResultActions result = mockMvc.perform(delete("/accounts/1"));
+        result.andDo(print());
+        result.andExpect(status().isBadRequest());
+
+        AccountDto.Create createDto = accountCreateDto();
+        Account account = service.createAccount(createDto);
+
+        result = mockMvc.perform(delete("/accounts/" + account.getId()));
+        result.andDo(print());
+        result.andExpect(status().isNoContent());
+
+    }
+
 }

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import tk.dbcore.commons.ErrorResponse;
@@ -52,7 +53,8 @@ public class AccountController {
         // 1.리턴 타임으로 판단.
         // 2.파라미터 이용.
         Account newAccount = service.createAccount(create);
-        return new ResponseEntity<>(modelMapper.map(newAccount, AccountDto.Response.class), HttpStatus.CREATED);
+        return new ResponseEntity<>(modelMapper.map(newAccount, AccountDto.Response.class),
+                HttpStatus.CREATED);
 
     }
 
@@ -82,11 +84,11 @@ public class AccountController {
     }
 
     // 전체 업데이트 : PUT
-    // --(username:"hadeslee", passowrd:"pass", fullName:"seokgon lee")
+    // - (username:"hadeslee", passowrd:"pass", fullName:"seokgon lee")
     // 부분 업데이트 : PATCH
-    // -- (username:"hadeslee")
-    // -- (passowrd:"pass")
-    // -- (fullName:"seokgon lee")
+    // - (username:"hadeslee")
+    // - (passowrd:"pass")
+    // - (fullName:"seokgon lee")
     @RequestMapping(value = "/accounts/{id}", method = PUT)
     public ResponseEntity updateAccount(@PathVariable Long id,
                                         @RequestBody @Valid AccountDto.Update updateDto,
@@ -117,5 +119,12 @@ public class AccountController {
         errorResponse.setMessage("[" + e.getId() + "]에 대당하는 계정이 없습니다.");
         errorResponse.setCode("account.not.found.exception");
         return errorResponse;
+    }
+
+    @RequestMapping(value = "/index", method = GET)
+    public String index(Model model) {
+        model.addAttribute("accounts", repository.findAll());
+        return "index"; //index.jsp -> <c:forEach items=${accounts} var="account">
+        //{ ${account.passowrd}
     }
 }

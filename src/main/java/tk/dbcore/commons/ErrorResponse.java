@@ -22,6 +22,14 @@ public class ErrorResponse {
 
     private List<FiledError> errors;
 
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public static class FiledError {
 
         private String filed;

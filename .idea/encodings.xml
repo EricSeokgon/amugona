@@ -2,5 +2,8 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/tk/dbcore/accounts/AccountNotFoundException.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/test/resources" charset="x-windows-949" />
   </component>
 </project>

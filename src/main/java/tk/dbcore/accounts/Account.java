@@ -41,5 +41,4 @@ public class Account {
 
     private boolean admin;
 
-
 }

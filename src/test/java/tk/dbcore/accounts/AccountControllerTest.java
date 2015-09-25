@@ -146,7 +146,7 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isOk());
-        result.andExpect(jsonPath("$.fullname", is("seokdon lee")));
+        result.andExpect(jsonPath("$.fullname", is("seokgon lee")));
 
     }
 

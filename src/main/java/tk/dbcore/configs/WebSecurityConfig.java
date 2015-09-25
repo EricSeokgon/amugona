@@ -40,6 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.httpBasic();
 
-        http.requestMatchers().antMatchers(HttpMethod.GET, "/accounts/*");
+        http.authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/accounts/*").hasRole("USER")
+                .anyRequest().permitAll();
     }
+
+    // ROLE Hieracry
 }
